@@ -1,0 +1,30 @@
+form#molie_choose_form li{
+	float: left;
+	width: 90%;
+	clear: both;
+	padding: 10px;
+	margin: 5px 0px;
+	border:1px solid #000;
+	background-color:#fff;
+}
+
+form#molie_choose_form p,
+form#molie_choose_form h3{
+	float: left;
+	width: 90%;
+	clear: both;
+	text-decoration: underline;
+}
+
+form#molie_choose_form span{
+	color:#0f0;
+	font-weight: bold;
+	padding-left: 10px;
+}
+
+form#molie_choose_form input[type=submit],
+div#molie_files input[type=submit]{
+	float: left;
+	width: 90%;
+	clear: both;
+}

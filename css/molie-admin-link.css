@@ -1,0 +1,19 @@
+form#molie_link_form label{
+	float: left;
+	width: 100%;
+	clear: both;
+	padding: 5px 0px;
+}
+
+form#molie_link_form input{
+	float: left;
+	width: 90%;
+	clear: both;
+	padding: 10px;
+	margin: 5px 0px;
+}
+
+div#molie_response{
+	width: 90%;
+	clear: both;
+}

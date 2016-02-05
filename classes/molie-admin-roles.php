@@ -7,37 +7,39 @@
 		}
 	
 		function create(){
+		
+			$types = array("course", "quiz", "qa", "dis");
 	
 			$AdminCapabilities = array(
-				'edit_linkedcanvascourse',
-				'read_linkedcanvascourse',
-				'delete_linkedcanvascourse',
-				'edit_linkedcanvascourses',
-				'edit_others_linkedcanvascourses',
-				'publish_linkedcanvascourses',
-				'read_private_linkedcanvascourses',
-				'delete_linkedcanvascourses',
-				'delete_private_linkedcanvascourses',
-				'delete_published_linkedcanvascourses',
-				'delete_others_linkedcanvascourses',
-				'edit_private_linkedcanvascourses',
-				'edit_published_linkedcanvascourses',
-				'edit_linkedcanvascourses'
+				'edit_linkedcanvas?',
+				'read_linkedcanvas?',
+				'delete_linkedcanvas?',
+				'edit_linkedcanvas?s',
+				'edit_others_linkedcanvas?s',
+				'publish_linkedcanvas?s',
+				'read_private_linkedcanvas?s',
+				'delete_linkedcanvas?s',
+				'delete_private_linkedcanvas?s',
+				'delete_published_linkedcanvas?s',
+				'delete_others_linkedcanvas?s',
+				'edit_private_linkedcanvas?s',
+				'edit_published_linkedcanvas?s',
+				'edit_linkedcanvas?s'
 			);
 			
 			$AuthorCapabilities = array(
-				'edit_linkedcanvascourse',
-				'read_linkedcanvascourse',
-				'delete_linkedcanvascourse',
-				'edit_linkedcanvascourses',
-				'publish_linkedcanvascourses',
-				'read_private_linkedcanvascourses',
-				'delete_linkedcanvascourses',
-				'delete_private_linkedcanvascourses',
-				'delete_published_linkedcanvascourses',
-				'edit_private_linkedcanvascourses',
-				'edit_published_linkedcanvascourses',
-				'edit_linkedcanvascourses'
+				'edit_linkedcanvas?',
+				'read_linkedcanvas?',
+				'delete_linkedcanvas?',
+				'edit_linkedcanvas?s',
+				'publish_linkedcanvas?s',
+				'read_private_linkedcanvas?s',
+				'delete_linkedcanvas?s',
+				'delete_private_linkedcanvas?s',
+				'delete_published_linkedcanvas?s',
+				'edit_private_linkedcanvas?s',
+				'edit_published_linkedcanvas?s',
+				'edit_linkedcanvas?s'
 			);
 			
 			$get_users = get_users();
@@ -47,13 +49,17 @@
 				if(in_array("administrator", $user->roles)){
 					$user = new WP_User( $user->data->ID );
 					foreach ( $AdminCapabilities as $capability ){
-						$user->add_cap( $capability );
+						foreach($types as $type){
+							$user->add_cap( str_replace("?",$type,$capability) );
+						}
 					}
 				}
 				if(in_array("editor", $user->roles)){
 					$user = new WP_User( $user->data->ID );
 					foreach ( $AuthorCapabilities as $capability ){
-						$user->add_cap( $capability );
+						foreach($types as $type){
+							$user->add_cap( str_replace("?",$type,$capability) );
+						}
 					}
 				}
 			}

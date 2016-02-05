@@ -24,6 +24,37 @@
 		}
 		
 		function link(){
+		
+			$args = array(
+				"post_type" => "linkedcanvascourse",
+				"post_status" => "publish"
+			);
+		
+			$courses = get_posts($args);
+		
+			if(count($courses)!=0){
+			
+				?><h1><?PHP echo __("Courses already linked to WordPress"); ?></h1>
+				<?PHP
+				
+					$nonce = wp_create_nonce("molie-link");
+				
+					foreach($courses as $course){
+						?>
+						<form method="post" action='<?PHP echo admin_url("admin.php?page=molie_choose"); ?>'>
+							<p><?PHP echo $course->post_title; ?></p>
+							<?PHP
+								
+							?>
+							<input type="hidden" name="molie-link-nonce" value="<?PHP echo $nonce; ?>"/>
+							<input type="hidden" name="molie_course" value="<?PHP echo get_post_meta($course->ID, "courseID", true) . "|" . $course->post_title; ?>" />
+							<input type="hidden" name="url" value="<?PHP echo get_post_meta($course->ID, "courseURL", true); ?>" />
+							<input type="hidden" name="token" value="<?PHP echo get_post_meta($course->ID, "courseToken", true); ?>" />
+							<input type="submit" value="<?PHP echo __("View content"); ?>" />
+						</form>
+						<?PHP
+					}
+			}
 			?>
 				<h1><?PHP echo __("Link a Course to WordPress"); ?></h1>
 				<div id="molie_process">

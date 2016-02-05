@@ -1,6 +1,6 @@
 <?PHP
 
-	class MOLIEquiz{
+	class MOLIEassignments{
 	
 		function __construct(){
 			add_action("admin_menu", array($this, "menu_create"));
@@ -8,25 +8,25 @@
 		}
 	
 		function admin_scripts_and_styles(){
-			wp_register_style( 'molie_admin_quiz_css', plugins_url() . '/molie/css/molie-admin-quiz.css', false, '1.0.0' );
-			wp_enqueue_style( 'molie_admin_quiz_css' );
-			wp_enqueue_script( 'molie-admin-quiz', plugins_url() . '/molie/js/molie-admin-quiz.js', array( 'jquery' ) );
-			wp_localize_script( 'molie-admin-quiz', 'molie_admin_quiz', 
+			wp_register_style( 'molie_admin_assignment_css', plugins_url() . '/molie/css/molie-admin-assignment.css', false, '1.0.0' );
+			wp_enqueue_style( 'molie_admin_assignment_css' );
+			wp_enqueue_script( 'molie-admin-assignment', plugins_url() . '/molie/js/molie-admin-assignment.js', array( 'jquery' ) );
+			wp_localize_script( 'molie-admin-assignment', 'molie_admin_assignment', 
 																			array( 
 																					'ajaxURL' => network_site_url() . "/wp-admin/admin-ajax.php",
-																					'nonce' => wp_create_nonce("molie_admin_quiz")
+																					'nonce' => wp_create_nonce("molie_admin_assignment")
 																				) 
 			);
 		}
 		
 		function menu_create(){
-			add_submenu_page( "molie_mgmt", __("Choose Course quizzes"), __("Choose Course quizzes"), 'manage_options', "molie_quiz", array($this,"quiz"));
+			add_submenu_page( "molie_mgmt", __("Choose Course Assignments"), __("Choose Course Assignments"), 'manage_options', "molie_assignments", array($this,"assignment"));
 		}
 		
-		function quiz(){
-			if(isset($_POST['molie-quiz-nonce'])){
+		function assignment(){
+			if(isset($_POST['molie-assignment-nonce'])){
 						
-				if(wp_verify_nonce($_POST['molie-quiz-nonce'], "molie-quiz-nonce"))
+				if(wp_verify_nonce($_POST['molie-assignment-nonce'], "molie-assignment-nonce"))
 				{
 				
 					$course_id = get_post_meta($_POST['course_id'], "courseID", true);
@@ -46,40 +46,39 @@
 																		)
 																	);
 					
-					$quizzes = new InstructureCanvasAPI\Courses\quizzes\quizzes();
-					$quizzes->setAPI($API);
-					$quizzes->setCourseID($course_id);
-					$data = $quizzes->getquizzes();
-					
+					$assignments = new InstructureCanvasAPI\Courses\Assignments\Assignments();
+					$assignments->setAPI($API);
+					$assignments->setCourseID($course_id);
+					$data = $assignments->getAssignments();
 					if($data){
 						if(count($data->content)!=0){	
 							echo "<div id='molie_choose'>";
-							echo "<h2>" . __("quizzes in this course") . "</h2>";
+							echo "<h2>" . __("Assignments in this course") . "</h2>";
 							echo "<div id='importProgress'><p><strong>" . __("Import Progress") . " <span id='importTotal'></span></strong></p><div id='importProgressBar'></div></div>";
 							echo '<form id="molie_choose_form" action="javascript:function connect(){return false;};">';
-							echo "<input type='submit' id='molie_quiz_submit' value='" . __("Link quizzes") . "' />";	
-							echo "<input type='submit' id='molie_quiz_skip' value='" . __("Skip step") . "' />";	
+							echo "<input type='submit' id='molie_assignment_submit' value='" . __("Link Assignments") . "' />";	
+							echo "<input type='submit' id='molie_assignment_skip' value='" . __("Skip step") . "' />";	
 							echo "<ul>";
 							foreach($data->content as $quiz){
 								echo "<li>";
 								if(get_post_meta($_POST['course_id'], "quiz_" . $quiz->id, true)!=""){
 									$link_checked = "";
-									$link_info = __("quiz already linked");
+									$link_info = __("Quiz already linked");
 								}else{
 									$link_checked = "checked";
 									$link_info = "";
 								}
-								echo "<input type='checkbox' " . $link_checked . " id='" . $quiz->id . "' course_post='" . $_POST['course_id'] . "'>" . $quiz->title . "<span id='update" . $quiz->id . "'>" . $link_info . "</span></li>";
+								echo "<input type='checkbox' " . $link_checked . " id='" . $quiz->id . "' course_post='" . $_POST['course_id'] . "'>" . $quiz->name . "<span id='update" . $quiz->id . "'>" . $link_info . "</span></li>";
 							}
 							echo "</ul>";
-							echo "<input type='submit' id='molie_quiz_submit' value='" . __("Link quizzes") . "' />";
+							echo "<input type='submit' id='molie_assignment_submit' value='" . __("Link Assignments") . "' />";
 							echo "</form>";
 							echo "</div>";
-							echo "<div id='molie_quiz_assignments' style='display:none'>";
-							echo '<form method="post" action="' . admin_url("admin.php?page=molie_assignments") . '">';
-							echo "<input name='course_id' type='hidden' value='" . $_POST['course_id'] . "' />";
-							echo wp_nonce_field("molie-assignment-nonce", "molie-assignment-nonce");
-							echo "<input type='submit' value='" . __("Now, Assignments") . "' />";
+							echo "<div id='molie_discussions' style='display:none'>";
+							echo '<form method="post" action="' . admin_url("admin.php?page=molie_discussions") . '">';
+							echo "<input name='course_id' type='hidden' value='" . $_POST['course_ID'] . "' />";
+							echo wp_nonce_field("molie-discussion-nonce", "molie-discussion-nonce");
+							echo "<input type='submit' value='" . __("Now, Discussions") . "' />";
 							echo "</form>";
 							echo "</div>";
 						}
@@ -102,16 +101,16 @@
 				
 					echo "<h2>" . __("Choose a course") . "</h2>";
 				
-					$nonce = wp_create_nonce("molie-quiz-nonce");
+					$nonce = wp_create_nonce("molie-assignment-nonce");
 					foreach($courses as $course){
 					?>
-						<form method="post" action='<?PHP echo admin_url("admin.php?page=molie_quiz"); ?>'>
+						<form method="post" action='<?PHP echo admin_url("admin.php?page=molie_assignments"); ?>'>
 							<p><?PHP echo $course->post_title; ?></p>
-							<input type="hidden" name="molie-quiz-nonce" value="<?PHP echo $nonce; ?>"/>
+							<input type="hidden" name="molie-assignment-nonce" value="<?PHP echo $nonce; ?>"/>
 							<input type="hidden" name="url" value="<?PHP echo get_post_meta($course->ID, "courseURL", true); ?>" />
 							<input type="hidden" name="token" value="<?PHP echo get_post_meta($course->ID, "courseToken", true); ?>" />
 							<input name="course_id" type="hidden" value="<?PHP echo $course->ID; ?>" />
-							<input type="submit" value="<?PHP echo __("Get Files"); ?>" />
+							<input type="submit" value="<?PHP echo __("Get Assignments"); ?>" />
 						</form>
 					<?PHP
 					}
@@ -122,5 +121,5 @@
 	
 	}
 	
-	$MOLIEquiz = new MOLIEquiz();
+	$MOLIEassignments = new MOLIEassignments();
 	

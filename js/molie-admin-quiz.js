@@ -1,19 +1,16 @@
-function molie_ajax_get(items, orig_length){
+function molie_quiz_get(items, orig_length){
 	if(items.length!=0){
 		item = items.shift();
+		
 		var data = {
-			'action': 'molie_page_import',
-			'module': jQuery(item).attr("module"),
-			'module_name': jQuery(item).attr("module_name"),
+			'action': 'molie_quiz_import',
+			'course_post': jQuery(item).attr("course_post"),
 			'item': jQuery(item).attr("id"),
-			'course': jQuery(item).attr("course"),
-			'nonce': molie_admin_choose.nonce
+			'nonce': molie_admin_quiz.nonce
 		};
 		
-		jQuery.post(molie_admin_choose.ajaxURL, data, function(response) {
-		
-			console.log(response);
-		
+		jQuery.post(molie_admin_quiz.ajaxURL, data, function(response) {
+			
 			width = jQuery("#importProgress")
 						.width();
 						
@@ -33,18 +30,14 @@ function molie_ajax_get(items, orig_length){
 			jQuery("#importProgressBar")
 				.html(percentage[0] + "%");
 				
-			html = jQuery(item)
-						.parent()
-						.html();
-						
-			jQuery(item)
-				.parent()
-				.html(html + "<span>" + response + "</span>");
-				
-			molie_ajax_get(items, orig_length);
+			jQuery("#update" + jQuery(item).attr("id"))
+				.html("File Downloaded")
+				.css("color","#0F0");
+			
+			molie_quiz_get(items, orig_length);
 			
 		});
-	}else{
+	}else{	
 		children = Array();
 		jQuery("div#molie_choose form")
 			.children()
@@ -53,20 +46,20 @@ function molie_ajax_get(items, orig_length){
 					children.push(value);
 				}
 			);
-		molie_fade_out(children);	
+		molie_quiz_fade_out(children);
 	}
 }
 
-function molie_fade_out(items){
+function molie_quiz_fade_out(items){
 	if(items.length!=0){
 		item = items.shift();
 		jQuery(item)
 			.fadeOut(10, function(){
-							molie_fade_out(items);
+							molie_quiz_fade_out(items);
 						}
 					);
 	}else{
-		jQuery("div#molie_files")
+		jQuery("div#molie_quiz_assignments")
 			.fadeIn(500);
 	}
 }
@@ -74,7 +67,7 @@ function molie_fade_out(items){
 jQuery(document).ready(
 	function(){
 	
-		jQuery("form#molie_choose_form #molie_choose_skip")
+		jQuery("form#molie_choose_form #molie_quiz_skip")
 			.on("click", 
 					function(){
 					
@@ -86,27 +79,25 @@ jQuery(document).ready(
 									children.push(value);
 								}
 							);
-						molie_fade_out(children);	
+						molie_quiz_fade_out(children);	
 					
 					}
 			);
 	
-		jQuery("form#molie_choose_form #molie_choose_submit")
+		jQuery("form#molie_choose_form #molie_quiz_submit")
 			.on("click", 
 					function(){
-					
-						jQuery(".pageLinked")
-							.each(
-								function(index,value){
-									jQuery(value)
-										.fadeOut(100);
-								}
-							);
 					
 						items = Array();
 						
 						jQuery("#importProgress")
 							.slideDown(500);
+							
+						jQuery("#importProgressBar")
+							.animate({width:"40px"}, 400);
+							
+						jQuery("#importProgressBar")
+							.html("0%");	
 					
 						jQuery("form#molie_choose_form input:checked")
 							.each(							
@@ -115,7 +106,7 @@ jQuery(document).ready(
 								}
 							);
 							
-						molie_ajax_get(items, items.length);
+						molie_quiz_get(items, items.length);
 					
 					}
 			);

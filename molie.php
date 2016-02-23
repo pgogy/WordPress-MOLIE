@@ -22,13 +22,7 @@
 			?>
 				<h1>M.O.L.I.E</h1>
 				<p>
-					Use "Scan" to scan the site for new files or size changes
-				</p>
-				<p>
-					Use "Re-Scan" to scan the site for new files or size changes after the site has changed
-				</p>
-				<p>
-					Use "Scan for IP" to scan the site for files with the poorly IP Address	
+					Start by click on getting your token in the menu
 				</p>
 			<?PHP
 		}	

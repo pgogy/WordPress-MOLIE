@@ -39,6 +39,8 @@
 				
 				$filetype = wp_check_filetype( basename( $file_system[$_POST['folder']]['actual_path'] . "/" . $_POST['filename'] ), null );
 
+				echo $file_system[$_POST['folder']]['actual_path'] . "/" . $_POST['filename'] . "<br />";
+
 				$attachment = array(
 					'guid'           => $file_system[$_POST['folder']]['actual_path'] . "/" . $_POST['filename'], 
 					'post_mime_type' => $filetype['type'],
@@ -46,16 +48,26 @@
 					'post_content'   => '',
 					'post_status'    => 'inherit'
 				);
-
+				
 				$attach_id = wp_insert_attachment($attachment, $file_system[$_POST['folder']]['actual_path'] . "/" . $_POST['filename']);
 				
+				$data = wp_generate_attachment_metadata( $attach_id, $file_system[$_POST['folder']]['actual_path'] . "/" . $_POST['filename'] );
+				
+				update_post_meta($attach_id, "_wp_attachment_metadata", $data, true);
+				
 				update_post_meta($post->ID, "molie_file_" . $_POST['item'], $attach_id);
+				update_post_meta($attach_id, "CanvasCourse", get_post_meta($post->ID, "courseID", true));
+				update_post_meta($attach_id, "CanvasFileVerifier", $_POST['verifier']);
+				update_post_meta($attach_id, "CanvasCourseIDFileID", get_post_meta($post->ID, "courseID", true) . "," . $_POST['item']);
+				
+				$file_url = get_post_meta($post->ID, "courseURL", true) . "/courses/" . get_post_meta($post->ID, "courseID", true) . "/files/" . $_POST['item'] . "/download?verifier=" . $_POST['verifier'];
+				
+				update_post_meta($attach_id, "CanvasFileURL", $file_url);
 				
 				echo __("File Downloaded");
 			}
 			else
 			{
-				print_r($_POST);
 				echo "Nonce failed";
 			}
 			wp_die();

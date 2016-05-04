@@ -10,7 +10,17 @@
 			
 			global $submenu, $menu;
 			
+			foreach($submenu["molie_mgmt"] as $index => $page){
+				if($page[2]=="molie_mediamgmt"){
+					unset($submenu["molie_mgmt"][$index]);
+				}
+			}
+			
 			foreach($menu as $index => $menu_item){
+				if($menu_item[0]=="Linked Canvas Assignments")
+				{
+					unset($menu[$index]);
+				}
 				if($menu_item[0]=="Linked Canvas Courses")
 				{
 					unset($menu[$index]);
@@ -24,6 +34,10 @@
 					unset($menu[$index]);
 				}
 				if($menu_item[0]=="Linked Canvas Discussions")
+				{
+					unset($menu[$index]);
+				}
+				if($menu_item[0]=="Linked Canvas Users")
 				{
 					unset($menu[$index]);
 				}

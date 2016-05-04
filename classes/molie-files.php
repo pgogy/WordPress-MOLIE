@@ -63,10 +63,10 @@
 					$course_token = get_post_meta($_POST['course_ID'], "courseToken", true);
 					$course_url = get_post_meta($_POST['course_ID'], "courseURL", true);
 			
-					require_once(__DIR__ . "/../API/Psr4AutoloaderClass.php");
+					require_once(__DIR__ . "/../../API/Psr4AutoloaderClass.php");
 					$loader = new Psr4AutoloaderClass;
 					$loader->register();
-					$loader->addNamespace('InstructureCanvasAPI', __DIR__ . "/../API/InstructureCanvasAPI/src");
+					$loader->addNamespace('InstructureCanvasAPI', __DIR__ . "/../../API/InstructureCanvasAPI/src");
 					
 					$API = new InstructureCanvasAPI\InstructureCanvasAPI( 
 																		array(

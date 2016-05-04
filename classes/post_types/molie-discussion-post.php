@@ -26,7 +26,7 @@
 				
 			$args = array(
 				'labels' => $labels,
-				'public' => false,
+				'public' => true,
 				'show_ui' => true,
 				'capability_type' => 'linkedcanvasdis',
 				'hierarchical' => false,
@@ -35,6 +35,7 @@
 				'menu_position' => 99,
 				'exclude_from_search' => true,
 				'publically_queryable' => true,
+				'taxonomies' => array('category',),
 			);
 		
 			register_post_type( 'linkedcanvasdis' , $args );

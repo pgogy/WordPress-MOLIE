@@ -6,6 +6,7 @@ function molie_file_get(items, orig_length){
 			'action': 'molie_file_import',
 			'course_post': jQuery(item).attr("course_post"),
 			'item': jQuery(item).attr("id"),
+			'verifier': jQuery(item).attr("verifier"),
 			'folder': jQuery(item).attr("folder"),
 			'filename': jQuery(item).attr("filename"),
 			'url': jQuery(item).attr("url"),
@@ -62,7 +63,7 @@ function molie_file_fade_out(items){
 		item = items.shift();
 		jQuery(item)
 			.fadeOut(10, function(){
-							molie_fade_out(items);
+							molie_file_fade_out(items);
 						}
 					);
 	}else{

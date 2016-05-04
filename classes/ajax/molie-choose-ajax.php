@@ -116,13 +116,14 @@
 					$syllabus->content->title = __("Syllabus");
 					$syllabus->content->url = "course-syllabus";
 					$syllabus->content->body = $course->syllabus_body;
-					$syllabus->published = 1;
+					$syllabus->content->published = 1;
 				}
 			}
 			return $syllabus;
 		}
 	
 		function page_import(){
+
 			if(wp_verify_nonce($_POST['nonce'], "molie_admin_choose"))
 			{
 			
@@ -141,7 +142,11 @@
 					}
 					else
 					{
-						$post_url = $this->get_post_url($post);
+						if(isset($_POST['module'])){
+							$post_url = $this->get_post_url($post);
+						}else{
+							$post_url = $_POST['item'];
+						}
 					}
 					
 					if(get_post_meta($post->ID, "course_" . $post->ID . "_" . $post_url, true)==""){
@@ -149,7 +154,11 @@
 						if($_POST['item']=="course-home-page"){
 							$post_content = $this->get_home_page($post);
 						}else if ($_POST['item']=="course-syllabus"){
+							$url = get_post_meta($post->ID, "courseURL", true) . "/courses/" . get_post_meta($post->ID, "courseID", true) . "/assignments/syllabus";
 							$post_content = $this->get_course_syllabus($post);
+							$post_content->content->url = $url;
+							$post_content->content->html_url = $url;
+							$post_content->content->page_id = "syllabus";
 						}else{
 							$post_content = $this->get_post_content($post, $post_url);
 						}
@@ -160,40 +169,81 @@
 							$publish = "draft";
 						}
 						
+						if($post_content->content->body==""){
+							$post_content->content->body = " ";
+						}
+						
 						$page = wp_insert_post(
 													array(
 														"post_type" => 'post',
 														"post_status" => $publish,
 														"post_title" => $post_content->content->title,
 														"post_author" => get_current_user_id(),
-														"post_content" => $post_content->content->body
+														"post_content" => $post_content->content->body,
 													)
 												);
-																		
-						update_post_meta($page, "CanvasLinked", true);
-						update_post_meta($page, "CanvasCourse", get_post_meta($post->ID, "courseID", true));
-						update_post_meta($page, "postCanvasID", $post_content->content->page_id);
-						update_post_meta($page, "postURL", $post_content->content->url);
-						update_post_meta($page, "postHTMLURL", $post_content->content->html_url);
 						
-						wp_set_post_categories($page, $categories);
+						if($page!=0){												
+																			
+							update_post_meta($page, "CanvasLinked", true);
+							update_post_meta($page, "CanvasCourse", get_post_meta($post->ID, "courseID", true));
+							update_post_meta($page, "postCanvasID", $post_content->content->page_id);
+							update_post_meta($page, "postURL", $post_content->content->url);
+							update_post_meta($page, "postHTMLURL", $post_content->content->html_url);
+							
+							wp_set_post_categories($page, $categories);
+							
+							if($_POST['item']=="course-home-page"){
+								add_post_meta($post->ID, "course_" . $post->ID . "_course-home-page", $post_content->content->url, true) . "****<br />";
+							}
+							else if($_POST['item']=="course-syllabus"){
+								add_post_meta($post->ID, "course_" . $post->ID . "_course-syllabus", $post_content->content->url, true)  . "****<br />";
+							}
+							else
+							{
+								add_post_meta($post->ID, "course_" . $post->ID . "_" . $post_content->content->url, $post_content->content->url, true) . "****<br />";
+							}
 						
-						if($_POST['item']!="course-home-page"){
-							add_post_meta($post->ID, "course_" . $post->ID . "_" . $post_content->content->url, $post_content->content->url, true);
-						}
-						else if($_POST['item']!="course-syllabus"){
-							add_post_meta($post->ID, "course_" . $post->ID . "_" . $post_content->content->url, $post_content->content->url, true);
-						}
-						else
-						{
-							add_post_meta($post->ID, "course_" . $post->ID . "_" . $post_content->content->url, $post_content->content->url, true);
-						}
+							echo __("Page Linked");
+
+						}else{
+					
+							echo __("Error");
+							if (is_wp_error($page)) {
+								$errors = $page->get_error_messages();
+								foreach ($errors as $error) {
+									echo $error; 
+								}
+							}
 						
-						echo __("Page Linked");
+						}
 						
 					}else{
 					
-						echo __("Page Already Linked");
+						if($_POST['override']=="true"){
+							if($_POST['item']=="course-home-page"){
+								$post_content = $this->get_home_page($post);
+								$key = "course_" . $post->ID . "_course-home-page";
+							}else if ($_POST['item']=="course-syllabus"){
+								$post_content = $this->get_course_syllabus($post);
+								$key = "course_" . $post->ID . "_course-syllabus";
+							}else{
+								$post_content = $this->get_post_content($post, $post_url);
+								$key = "course_" . $post->ID . "_" . $post_content->content->url;
+							}
+							
+							global $wpdb;
+							$update_id = $wpdb->get_results("select post_id from " . $wpdb->prefix . "postmeta where meta_key='" . $key . "'"); 
+							
+							$new_post = array(
+								'ID'           => $update_id[0]->post_id,
+								'post_content' => $post_content->content->body,
+							);
+							wp_update_post( $new_post );
+							echo __("Page Updated");
+						}else{
+							echo __("Page Already Linked");
+						}
 					
 					}
 					
@@ -201,7 +251,6 @@
 			}
 			else
 			{
-				print_r($_POST);
 				echo "Nonce failed";
 			}
 			wp_die();

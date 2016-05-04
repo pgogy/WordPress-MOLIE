@@ -7,20 +7,26 @@
 			add_action("wp_ajax_no_priv_molie_assignment_import", array($this, "assignment_import"));
 		}
 		
-		private function create_categories($post, $module_id){
+		private function create_categories($post){
+		
+			$categories = array();
+		
 			$course_category = get_post_meta($post->ID, "course_category_id", true);
 			if($course_category==""){
 				$course_category = wp_create_category( $post->post_title );
 				add_post_meta($post->ID, "course_category_id", $course_category, true);
-			}
+			}			
+			array_push($categories, $course_category);
 			
-			$assignment_category = get_post_meta($post->ID, "course_assignment_" . $_POST['module'], true);
-			if($assignment_category==""){
-				$assignment_category = wp_create_category( __("Assignments"), $course_category );
-				add_post_meta($post->ID, "course_assignment_" . $_POST['module'], $assignment_category, true);
+			$assignment_category = get_post_meta($post->ID, "course_module_assignments", true);
+			if($module_category==""){
+				$assignment_category = wp_create_category( "Assignments", $course_category );
+				add_post_meta($post->ID, "course_module_assignments", $assignment_category, true);
 			}
+			array_push($categories, $assignment_category);
 			
-			return array($course_category, $module_category, $assignment_category);
+			return $categories;
+			
 		}
 		
 		function get_assignment($post){
@@ -48,21 +54,20 @@
 	
 		function assignment_import(){
 		
-			print_r($_POST);
-		
 			if(wp_verify_nonce($_POST['nonce'], "molie_admin_assignment"))
 			{
 			
 				$post = get_post($_POST['course_post']);
-				$categories = $this->create_categories($post, $module_id);
+				
+				$categories = $this->create_categories($post);
 				
 				$quiz = $this->get_assignment($post);
 		
-				if(get_post_meta($post->ID, "quiz_" . $quiz->id, true)==""){
+				if(get_post_meta($post->ID, "canvasQuiz_" . $quiz->id, true)==""){
 				
 					$quiz_post = wp_insert_post(
 												array(
-													"post_type" => 'post',
+													"post_type" => 'linkedcanvasamt',
 													"post_status" => 'publish',
 													"post_title" => $quiz->name,
 													"post_content" => $quiz->description,
@@ -70,8 +75,11 @@
 												)
 											);
 											
-					update_post_meta($quiz_post, "quizURL", $quiz->html_url, true);
-					update_post_meta($post->ID, "quiz_" . $quiz->id, $quiz_post, true);
+					wp_set_post_categories($quiz_post, $categories);
+											
+					update_post_meta($quiz_post, "CanvasCourse", get_post_meta($post->ID, "courseID", true), true);
+					update_post_meta($quiz_post, "canvasQuizURL", $quiz->html_url, true);
+					update_post_meta($post->ID, "canvasQuiz_" . $quiz->id, $quiz_post, true);
 					echo __("Assignment linked");
 				}
 				else

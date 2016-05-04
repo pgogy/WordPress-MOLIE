@@ -11,8 +11,6 @@ function molie_discussion_get(items, orig_length){
 		
 		jQuery.post(molie_admin_discussion.ajaxURL, data, function(response) {
 		
-			console.log(response);
-			
 			width = jQuery("#importProgress")
 						.width();
 						
@@ -36,7 +34,7 @@ function molie_discussion_get(items, orig_length){
 				.html("File Downloaded")
 				.css("color","#0F0");
 			
-			molie_quiz_get(items, orig_length);
+			molie_discussion_get(items, orig_length);
 			
 		});
 	}else{	
@@ -61,7 +59,7 @@ function molie_discussion_fade_out(items){
 						}
 					);
 	}else{
-		jQuery("div#molie_learn")
+		jQuery("div#molie_roster")
 			.fadeIn(500);
 	}
 }

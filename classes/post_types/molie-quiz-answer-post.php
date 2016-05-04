@@ -35,6 +35,7 @@
 				'menu_position' => 98,
 				'exclude_from_search' => true,
 				'publically_queryable' => true,
+				'taxonomies' => array('category',),
 			);
 		
 			register_post_type( 'linkedcanvasqa' , $args );

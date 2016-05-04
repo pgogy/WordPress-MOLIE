@@ -1,9 +1,13 @@
 function molie_ajax_get(items, orig_length){
+
+	console.log(items);
+
 	if(items.length!=0){
 		item = items.shift();
 		var data = {
 			'action': 'molie_page_import',
 			'module': jQuery(item).attr("module"),
+			'override': jQuery(item).attr("override"),
 			'module_name': jQuery(item).attr("module_name"),
 			'item': jQuery(item).attr("id"),
 			'course': jQuery(item).attr("course"),
@@ -11,8 +15,6 @@ function molie_ajax_get(items, orig_length){
 		};
 		
 		jQuery.post(molie_admin_choose.ajaxURL, data, function(response) {
-		
-			console.log(response);
 		
 			width = jQuery("#importProgress")
 						.width();
@@ -46,7 +48,7 @@ function molie_ajax_get(items, orig_length){
 		});
 	}else{
 		children = Array();
-		jQuery("div#molie_choose form")
+		jQuery("div#molie_choose")
 			.children()
 			.each(
 				function(index,value){
@@ -58,6 +60,7 @@ function molie_ajax_get(items, orig_length){
 }
 
 function molie_fade_out(items){
+	console.log(items);
 	if(items.length!=0){
 		item = items.shift();
 		jQuery(item)

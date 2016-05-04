@@ -1,7 +1,5 @@
 <?PHP
 	
-	//8~tuivUvM3GFS3UuGWSSledw0YcR1btI97KlPCgnoZ7g47tynNY0KPNv8rwBNTlypl
-	
 	class MOLIEcourseAjax{
 	
 		function __construct(){;

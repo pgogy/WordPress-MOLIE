@@ -31,7 +31,7 @@ function molie_quiz_get(items, orig_length){
 				.html(percentage[0] + "%");
 				
 			jQuery("#update" + jQuery(item).attr("id"))
-				.html("File Downloaded")
+				.html("Quiz linked")
 				.css("color","#0F0");
 			
 			molie_quiz_get(items, orig_length);

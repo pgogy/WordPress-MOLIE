@@ -7,6 +7,28 @@
 			add_action("wp_ajax_no_priv_molie_quiz_import", array($this, "quiz_import"));
 		}
 		
+		private function create_categories($post){
+		
+			$categories = array();
+		
+			$course_category = get_post_meta($post->ID, "course_category_id", true);
+			if($course_category==""){
+				$course_category = wp_create_category( $post->post_title );
+				add_post_meta($post->ID, "course_category_id", $course_category, true);
+			}			
+			array_push($categories, $course_category);
+			
+			$quiz_category = get_post_meta($post->ID, "course_module_quizzes", true);
+			if($quiz_category==""){
+				$quiz_category = wp_create_category( "Quizzes", $course_category );
+				add_post_meta($post->ID, "course_module_quizzes", $quiz_category, true);
+			}
+			array_push($categories, $quiz_category);
+			
+			return $categories;
+			
+		}
+		
 		private function get_quiz_questions($post){
 			require_once(__DIR__ . "/../../API/Psr4AutoloaderClass.php");
 			$loader = new Psr4AutoloaderClass;
@@ -25,8 +47,6 @@
 			$quiz->setAPI($API);
 			$quiz->setCourseID(get_post_meta($post->ID, "courseID", true));
 			$quiz_data = $quiz->getQuizQuestions($_POST['item']); 
-			
-			print_r($quiz_data);
 			
 			return $quiz_data->content;
 		}
@@ -60,9 +80,14 @@
 			
 				$post = get_post($_POST['course_post']);
 				
-				$quiz = $this->get_quiz($post);
-				if(get_post_meta($post->ID, "quiz_" . $quiz->id, true)==""){
+				$categories = $this->create_categories($post);
 				
+				$quiz = $this->get_quiz($post);
+				
+				print_r($quiz);
+				
+				if(get_post_meta($post->ID, "canvasQuiz_" . $quiz->id, true)==""){
+								
 					$quiz_post = wp_insert_post(
 												array(
 													"post_type" => 'linkedcanvasquiz',
@@ -72,24 +97,24 @@
 													"post_author" => get_current_user_id()
 												)
 											);
-					update_post_meta($quiz_post, "quizURL", $quiz->html_url, true);
-					update_post_meta($post->ID, "quiz_" . $quiz->id, $quiz_post, true);
+					
+					wp_set_post_categories($quiz_post, $categories);
+											
+					update_post_meta($quiz_post, "CanvasCourse", get_post_meta($post->ID, "courseID", true), true);
+					update_post_meta($quiz_post, "canvasQuizURL", $quiz->html_url, true);
+					update_post_meta($post->ID, "canvasQuiz_" . $quiz->id, $quiz_post, true);
 					
 				}
 				else
 				{
-					$quiz_post = get_post_meta($post->ID, "quiz_" . $quiz->id, true);
+					$quiz_post = get_post_meta($post->ID, "canvasQuiz_" . $quiz->id, true);
 				}
-					
-				echo "****";	
-				print_r($post);	
-				echo "****";		
 	
 				$questions = $this->get_quiz_questions($post);
 				
-				foreach($questions->content as $question){
-					
-					if(get_post_meta($quiz_post, "quiz_question_" . $question->id, true)==""){
+				foreach($questions as $question){
+				
+					if(get_post_meta($quiz_post, "canvasQuizQuestion_" . $question->id, true)==""){
 				
 						$question_post = wp_insert_post(
 												array(
@@ -101,25 +126,33 @@
 												),
 												true
 											);
-											
-						update_post_meta($question_post, "quiz", $question->quiz_id, true);
-						update_post_meta($question_post, "question_id", $question->id, true);
-						update_post_meta($question_post, "question_position", $question->position, true);
-						update_post_meta($quiz_post, "quiz_question_" . $question->id, $question_post ,true);
+						
+						wp_set_post_categories($question_post, $categories);
+						
+						update_post_meta($question_post, "CanvasCourse", get_post_meta($post->ID, "courseID", true), true);
+						update_post_meta($question_post, "canvasQuiz", $question->quiz_id, true);
+						update_post_meta($question_post, "canvasQuizWPPost", $quiz_post, true);
+						update_post_meta($question_post, "canvasQuestion_id", $question->id, true);
+						update_post_meta($question_post, "canvasQuestion_position", $question->position, true);
+						update_post_meta($quiz_post, "canvasQuizQuestion_" . $question->id, $question_post ,true);
 						
 						if($question->question_type=="multiple_choice_question"){
 							$counter = 1;
 							foreach($question->answers as $answer){
-								update_post_meta($question, "id_" . $counter, $answer->id, true);
-								update_post_meta($question, "answer_" . $counter, $answer->text, true);
-								update_post_meta($question, "feedback_" . $counter, $answer->comments, true);
+								print_r($answer);
+								update_post_meta($question_post, "qa_id_" . $counter, $answer->id, true);
+								update_post_meta($question_post, "qa_weight_" . $counter, $answer->weight, true);
+								update_post_meta($question_post, "qa_answer_" . $counter, $answer->text, true);
+								update_post_meta($question_post, "qa_feedback_" . $counter, $answer->comments, true);
 								$counter++;
 							}
 						}
 					
 					}
-					echo __("Quiz linked");
+				
 				}
+				
+				echo __("Quiz linked");
 			
 			}
 			else

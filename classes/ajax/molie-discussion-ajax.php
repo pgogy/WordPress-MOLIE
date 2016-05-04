@@ -56,7 +56,7 @@
 				
 				$discussion = $this->get_discussion($post);
 				
-				if(get_post_meta($post->ID, "discussion_" . $discussion->id, true)==""){
+				if(get_post_meta($post->ID, "canvasDiscussion_" . $discussion->id, true)==""){
 				
 					$discussion_post = wp_insert_post(
 												array(
@@ -68,8 +68,12 @@
 												)
 											);
 											
-					update_post_meta($discussion_post, "quizURL", $discussion->html_url, true);
-					update_post_meta($post->ID, "discussion_" . $discussion->id, $discussion_post, true);
+					
+					wp_set_post_categories($discussion_post, $categories);
+											
+					update_post_meta($discussion_post, "CanvasCourse", get_post_meta($post->ID, "courseID", true), true);
+					update_post_meta($discussion_post, "canvasDiscussionURL", $discussion->html_url, true);
+					update_post_meta($post->ID, "canvasDiscussion_" . $discussion->id, $discussion_post, true);
 					echo __("Discussion linked");
 				}
 				else

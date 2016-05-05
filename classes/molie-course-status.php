@@ -24,7 +24,7 @@
 		}
 	
 		function menu_create(){
-			add_submenu_page( "molie_mgmt", __("Check course"), __("Check course"), 'manage_options', "molie_course_check", array($this,"course_check"));
+			add_submenu_page( "molie_mgmt", __("Check course"), __("Check course"), 'edit_linkedcanvascourse', "molie_course_check", array($this,"course_check"));
 		}
 		
 		function course_check(){
@@ -56,7 +56,10 @@
 				echo "<div id='molie_discussions'><p>" . count($discussion_data) . " " . __("discussions being checked") . " <span id='disprogress'></span></p><div><ul id='disissues'></ul></div></div>";
 				echo "<div id='molie_roster'><p>" . count($users_data) . " " . __("users being checked") . " <span id='rosterprogress'></span></p><div><ul id='rosterissues'></ul></div></div>";
 				echo "<div id='molie_calendar'><p>" . __("Calendar being checked") . " <span id='calendarprogress'></span></p><div><ul id='calendarissues'></ul></div></div>";
-				echo "<script type='text/javascript' language='javascript'>molie_admin_check_course(" . $_GET['course_id'] . ",'" . admin_url() . "');</script>";
+				
+				$form_url = admin_url("wp-admin/admin.php");
+				
+				echo "<script type='text/javascript' language='javascript'>molie_admin_check_course(" . $_GET['course_id'] . ",'" . $form_url . "');</script>";
 				
 			}else{
 				$args = array(
@@ -72,8 +75,9 @@
 				
 					$nonce = wp_create_nonce("molie-course-nonce");
 					foreach($courses as $course){
+						$form_url = admin_url("wp-admin/admin.php");
 					?>
-						<form method="GET" action='<?PHP admin_url("admin.php"); ?>'>
+						<form method="GET" action='<?PHP echo $form_url; ?>'>
 							<p><?PHP echo $course->post_title; ?></p>
 							<input type="hidden" name="page" value="molie_course_check"/>
 							<input type="hidden" name="molie-calendar-nonce" value="<?PHP echo $nonce; ?>"/>
@@ -88,7 +92,10 @@
 				}
 				
 			}
-			?><p><a href="<?PHP echo admin_url("edit.php?post_type=linkedcanvascourse"); ?>"><?PHP echo __("Course Management Page in WordPress"); ?></a></p><?PHP
+			
+			$mgmt_url = admin_url("edit.php?post_type=linkedcanvascourse");
+			
+			?><p><a href="<?PHP echo $mgmt_url; ?>"><?PHP echo __("Course Management Page in WordPress"); ?></a></p><?PHP
 		}
 	
 	}

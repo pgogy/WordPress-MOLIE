@@ -38,7 +38,7 @@
 				$course_post = $wpdb->get_results("select post_id from " . $wpdb->prefix . "postmeta where meta_key='CourseID' and meta_value = '" . $course_id . "'");
 				$course_post = get_post($course_post[0]->post_id);
 				$canvas_url = get_post_meta($course_post->ID,"courseURL",true);
-				$site_url = site_url();
+				$site_url = network_site_url();
 				if(strpos($img_url,$site_url)!==FALSE){
 					$node->setAttribute("src", $this->localRewrite($img_url, $canvas_url, $course_id));
 				}
@@ -55,7 +55,7 @@
 			$result = $xpath->query($query); 
 			foreach ($result as $node) {
 				$href = $node->getAttribute("href");
-				if(strpos($href,site_url())!==FALSE){
+				if(strpos($href,network_site_url())!==FALSE){
 					$linked_post_id = url_to_postid($href);
 					if($linked_post_id!=0){
 						if(get_post_meta($linked_post_id, "CanvasLinked", true)==1){
@@ -166,7 +166,7 @@
 			$result = $xpath->query($query); 
 			foreach ($result as $node) {
 				if($node->getAttribute("rel")=="stylesheet"){
-					if(strpos($node->getAttribute("href"), site_url())!==FALSE){
+					if(strpos($node->getAttribute("href"), network_site_url())!==FALSE){
 						array_push($styles, $node->getAttribute("href"));
 					}
 				}
@@ -193,9 +193,9 @@
 					require_once(dirname(__FILE__) . "/../lib/emogrifier.php");
 					
 					foreach($styles as $style){
-						if(strpos($style,site_url())!==FALSE){
+						if(strpos($style,network_site_url())!==FALSE){
 							$dir = wp_upload_dir();
-							$style = str_replace(site_url() . "/wp-content/", str_replace("uploads","",$dir['basedir']), $style);
+							$style = str_replace(network_site_url() . "/wp-content/", str_replace("uploads","",$dir['basedir']), $style);
 							$style = explode("?",$style);
 							$style = $style[0];
 						}

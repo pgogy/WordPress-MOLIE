@@ -10,9 +10,11 @@
 			
 			global $submenu, $menu;
 			
-			foreach($submenu["molie_mgmt"] as $index => $page){
-				if($page[2]=="molie_mediamgmt"){
-					unset($submenu["molie_mgmt"][$index]);
+			if(isset($submenu["molie_mgmt"])){
+				foreach($submenu["molie_mgmt"] as $index => $page){
+					if($page[2]=="molie_mediamgmt"){
+						unset($submenu["molie_mgmt"][$index]);
+					}
 				}
 			}
 			

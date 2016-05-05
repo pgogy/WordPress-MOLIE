@@ -201,7 +201,7 @@ function molie_admin_check_course(course_id, url){
 							.append("<li>" + item['display_name'] + " is not saved locally - <a href='" + item['url']  + "'>" + item['url'] + "</a></li>");
 					}
 					jQuery("#molie_calendar")
-						.append("<p><a target='_blank' href='" + (url + "admin.php?page=molie_roster") + "'>Update roster</a></p>");
+						.append("<p><a target='_blank' href='" + (url + "admin.php?page=molie_calendar") + "'>Update Calendar</a></p>");
 				}
 			}
 		);

@@ -7,7 +7,7 @@
 		}
 		
 		function menu_create(){
-			add_submenu_page( "molie_mgmt", __("Getting your Token"), __("Getting your Token"), 'manage_options', "molie_token", array($this,"token"));
+			add_submenu_page( "molie_mgmt", __("Getting your Token"), __("Getting your Token"), 'edit_linkedcanvascourse', "molie_token", array($this,"token"));
 		}
 		
 		function token(){

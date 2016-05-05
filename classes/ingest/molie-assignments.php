@@ -15,7 +15,7 @@
 					wp_enqueue_script( 'molie-admin-assignment', plugins_url() . '/molie/js/molie-admin-assignment.js', array( 'jquery' ) );
 					wp_localize_script( 'molie-admin-assignment', 'molie_admin_assignment', 
 																					array( 
-																							'ajaxURL' => network_site_url() . "/wp-admin/admin-ajax.php",
+																							'ajaxURL' => admin_url("admin-ajax.php"),
 																							'nonce' => wp_create_nonce("molie_admin_assignment")
 																						) 
 					);
@@ -24,7 +24,7 @@
 		}
 		
 		function menu_create(){
-			add_submenu_page( "molie_mgmt", __("Choose Course Assignments"), __("Choose Course Assignments"), 'manage_options', "molie_assignments", array($this,"assignment"));
+			add_submenu_page( "molie_mgmt", __("Choose Course Assignments"), __("Choose Course Assignments"), 'edit_linkedcanvascourse', "molie_assignments", array($this,"assignment"));
 		}
 		
 		function assignment(){
@@ -108,7 +108,7 @@
 					$nonce = wp_create_nonce("molie-assignment-nonce");
 					foreach($courses as $course){
 					?>
-						<form method="post" action='<?PHP echo admin_url("admin.php?page=molie_assignments"); ?>'>
+						<form method="post" action='<?PHP echo admin_url("admin.php?page=molie_assignments");  ?>'>
 							<p><?PHP echo $course->post_title; ?></p>
 							<input type="hidden" name="molie-assignment-nonce" value="<?PHP echo $nonce; ?>"/>
 							<input type="hidden" name="url" value="<?PHP echo get_post_meta($course->ID, "courseURL", true); ?>" />

@@ -30,11 +30,26 @@
 			
 			?><p><label for="courseURL"><?PHP echo __("Course URL"); ?></label><input id="courseURL" name="courseURL" maxlength="200" size="100" value="<?PHP echo get_post_meta($post->ID, "courseURL", true); ?>" /></p><?PHP
 			?><p><label for="courseToken"><?PHP echo __("Course Token"); ?></label><input id="courseToken" name="courseToken" maxlength="200" size="100" value="<?PHP echo get_post_meta($post->ID, "courseToken", true); ?>" /></p><?PHP
-			?><p><a href="<?PHP echo admin_url("edit.php?course=" . $course_id . "&canvas_linked=true"); ?>"><?PHP echo __("See pages in this course"); ?></a></p><?PHP
-			?><p><a href="<?PHP echo admin_url('admin.php?page=molie_media_mgmt&course_id=' . $_GET['post']); ?>"><?PHP echo __("See media in this course"); ?></a></p><?PHP
-			?><p><a href="<?PHP echo admin_url("edit.php?post_type=linkedcanvasuser&course=" . $course_id . "&canvas_linked=true"); ?>"><?PHP echo __("See users in this course"); ?></a></p><?PHP
-			?><p><a href="<?PHP echo admin_url("edit.php?post_type=linkedcanvasquiz&course=" . $course_id . "&canvas_linked=true"); ?>"><?PHP echo __("See quizzes in this course"); ?></a></p><?PHP
-			?><p><a href="<?PHP echo admin_url("edit.php?post_type=linkedcanvasdis&course=" . $course_id . "&canvas_linked=true"); ?>"><?PHP echo __("See discussions in this course"); ?></a></p><?PHP
+			
+			$admin_url = admin_url("edit.php?course=" . $course_id . "&canvas_linked=true");
+			
+			?><p><a href="<?PHP echo $admin_url; ?>"><?PHP echo __("See pages in this course"); ?></a></p><?PHP
+			
+			$admin_url = admin_url('admin.php?page=molie_media_mgmt&course_id=' . $_GET['post']);
+			
+			?><p><a href="<?PHP echo $admin_url; ?>"><?PHP echo __("See media in this course"); ?></a></p><?PHP
+			
+			$admin_url = admin_url("edit.php?post_type=linkedcanvasuser&course=" . $course_id . "&canvas_linked=true");
+			
+			?><p><a href="<?PHP echo $admin_url; ?>"><?PHP echo __("See users in this course"); ?></a></p><?PHP
+			
+			$admin_url = admin_url("edit.php?post_type=linkedcanvasquiz&course=" . $course_id . "&canvas_linked=true");
+			
+			?><p><a href="<?PHP echo $admin_url; ?>"><?PHP echo __("See quizzes in this course"); ?></a></p><?PHP
+			
+			$admin_url = admin_url("edit.php?post_type=linkedcanvasdis&course=" . $course_id . "&canvas_linked=true");
+			
+			?><p><a href="<?PHP echo $admin_url; ?>"><?PHP echo __("See discussions in this course"); ?></a></p><?PHP
 		}
 		
 		function save_post($post_id){

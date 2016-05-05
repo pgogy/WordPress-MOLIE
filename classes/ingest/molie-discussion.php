@@ -15,7 +15,7 @@
 					wp_enqueue_script( 'molie-admin-discussion', plugins_url() . '/molie/js/molie-admin-discussion.js', array( 'jquery' ) );
 					wp_localize_script( 'molie-admin-discussion', 'molie_admin_discussion', 
 																					array( 
-																							'ajaxURL' => network_site_url() . "/wp-admin/admin-ajax.php",
+																							'ajaxURL' => admin_url("admin-ajax.php"),
 																							'nonce' => wp_create_nonce("molie_admin_discussion")
 																						) 
 					);
@@ -24,7 +24,7 @@
 		}
 		
 		function menu_create(){
-			add_submenu_page( "molie_mgmt", __("Choose Course Discussions"), __("Choose Course Discussions"), 'manage_options', "molie_discussions", array($this,"discussion"));
+			add_submenu_page( "molie_mgmt", __("Choose Course Discussions"), __("Choose Course Discussions"), 'edit_linkedcanvascourse', "molie_discussions", array($this,"discussion"));
 		}
 		
 		function discussion(){
@@ -80,6 +80,7 @@
 							echo "</form>";
 							echo "</div>";
 							echo "<div id='molie_roster' style='display:none'>";
+							
 							echo '<form method="post" action="' . admin_url("admin.php?page=molie_roster") . '">';
 							echo "<input name='course_id' type='hidden' value='" . $_POST['course_id'] . "' />";
 							echo wp_nonce_field("molie-roster-nonce", "molie-roster-nonce");
@@ -90,7 +91,6 @@
 					}
 					$loader->unregister();
 				}else{
-					echo "HELLO";
 					print_r($_POST);
 				}
 			}else{

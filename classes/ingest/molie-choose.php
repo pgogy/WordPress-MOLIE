@@ -15,7 +15,7 @@
 					wp_enqueue_script( 'molie-admin-choose', plugins_url() . '/molie/js/molie-admin-choose.js', array( 'jquery' ) );
 					wp_localize_script( 'molie-admin-choose', 'molie_admin_choose', 
 																					array( 
-																							'ajaxURL' => network_site_url() . "/wp-admin/admin-ajax.php",
+																							'ajaxURL' => admin_url("admin-ajax.php"),
 																							'nonce' => wp_create_nonce("molie_admin_choose")
 																						) 
 					);
@@ -24,17 +24,17 @@
 		}
 		
 		function menu_create(){
-			add_submenu_page( "molie_mgmt", __("Choose course Pages"), __("Choose Course Pages"), 'manage_options', "molie_choose", array($this,"choose"));
+			add_submenu_page( "molie_mgmt", __("Choose course Pages"), __("Choose Course Pages"), 'edit_linkedcanvascourse', "molie_choose", array($this,"choose"));
 		}
 		
 		function choose(){
-		
+
 			if(isset($_POST['molie-link-nonce']))
 			{
 			
 				if(wp_verify_nonce($_POST['molie-link-nonce'], "molie-link"))
 				{
-				
+
 					$course_details = explode("|", $_POST['molie_course']);
 					$posts = get_posts(array("post_type" => 'linkedcanvascourse'));
 					$post_insert = true;
@@ -180,7 +180,8 @@
 							echo "</div>";
 							echo "<div id='molie_files' style='display:none'>";
 							echo "<p>" . __("Page Linking complete") . "</p>";
-							echo "<form action='" . admin_url("admin.php?page=molie_files") . "' method='post'>";
+							
+							?><form method="post" action='<?PHP echo admin_url("admin.php?page=molie_files"); ?>'><?PHP
 							$nonce = wp_create_nonce("molie-files");
 							echo '<input type="hidden" name="molie-files-nonce" value="' . $nonce . '"/>';
 							echo "<input type='hidden' name='course_ID' value='" . $course . "' />";
@@ -219,8 +220,7 @@
 				
 						$nonce = wp_create_nonce("molie-link");
 						foreach($courses as $course){
-						?>
-							<form method="post" action='<?PHP echo admin_url("admin.php?page=molie_choose"); ?>'>
+							?><form method="post" action='<?PHP echo admin_url("admin.php?page=molie_choose"); ?>'>
 								<p><?PHP echo $course->post_title; ?></p>
 								<input type="hidden" name="molie-link-nonce" value="<?PHP echo $nonce; ?>"/>
 								<input type="hidden" name="molie_course" value="<?PHP echo get_post_meta($course->ID, "courseID", true) . "|" . $course->post_title; ?>" />

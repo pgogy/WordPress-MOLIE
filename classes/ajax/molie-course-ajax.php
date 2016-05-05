@@ -33,7 +33,7 @@
 				$data = $courses->getCoursesForThisUser();
 				if($data){
 					if(count($data->content)!=0){
-						echo "<form method='post' action='" . admin_url("admin.php?page=molie_choose") . "'>";
+						echo "<form method='post' action='" . $_POST['admin_url'] . "admin.php?page=molie_choose'>";
 						wp_nonce_field("molie-link", "molie-link-nonce");
 						echo "<p>" . __("Now Choose a Course") . "</p>";
 						echo "<p><select name='molie_course'>";
@@ -48,7 +48,10 @@
 					}
 					else
 					{
-						echo "<p>" . __("There was an error correcting") . "</p>";
+						echo "<p>" . __("There was an error connecting") . "</p>";
+						echo "<pre>";
+						print_r($data);
+						echo "</pre>";
 					}
 				}
 				$loader->unregister();

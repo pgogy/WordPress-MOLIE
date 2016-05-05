@@ -7,7 +7,7 @@
 		}
 	
 		function menu_create(){
-			add_submenu_page( "molie_mgmt", __("Your courses"), __("Your courses"), 'manage_options', "molie_your_course", array($this,"your_course"));
+			add_submenu_page( "molie_mgmt", __("Your courses"), __("Your courses"), 'edit_linkedcanvascourse', "molie_your_course", array($this,"your_course"));
 		}
 		
 		function your_course(){
@@ -22,28 +22,36 @@
 				
 				global $wpdb;
 				$data = $wpdb->get_results('select ' . $wpdb->prefix . 'posts.ID, post_title, meta_key, meta_value from ' . $wpdb->prefix . 'posts, ' . $wpdb->prefix . 'postmeta where post_type = "post" and ID = post_id and meta_key = "CanvasCourse" and meta_value = ' . $course_id);
+				$admin_url = admin_url("edit.php?course=" . $course_id . "&canvas_linked=true");
 				
-				?><p><?PHP echo count($data) . " " . __("course pages linked"); ?> <a target="_blank" href="<?PHP echo admin_url("edit.php?course=" . $course_id . "&canvas_linked=true"); ?>"><?PHP echo __("See pages in this course"); ?></a></p><?PHP
+				?><p><?PHP echo count($data) . " " . __("course pages linked"); ?> <a href="<?PHP echo $admin_url; ?>"><?PHP echo __("See pages in this course"); ?></a></p><?PHP
 				
 				$data = $wpdb->get_results('select ' . $wpdb->prefix . 'posts.ID, post_title, meta_key, meta_value from ' . $wpdb->prefix . 'posts, ' . $wpdb->prefix . 'postmeta where post_type = "attachment" and ID = post_id and meta_key = "CanvasCourse" and meta_value = ' . $course_id);
 				
-				?><p><?PHP echo count($data) . " " . __("course files linked"); ?> <a target="_blank" href="<?PHP echo admin_url('admin.php?page=molie_mediamgmt&course_id=' . $course_id); ?>"><?PHP echo __("See media in this course"); ?></a></p><?PHP
+				$active_blog = get_active_blog_for_user( get_current_user_id() );
+				$admin_url = admin_url('admin.php?page=molie_media_mgmt&course_id=' . $course_id);
+				
+				?><p><?PHP echo count($data) . " " . __("course files linked"); ?> <a href="<?PHP echo $admin_url; ?>"><?PHP echo __("See media in this course"); ?></a></p><?PHP
 				
 				$data = $wpdb->get_results('select ' . $wpdb->prefix . 'posts.ID, post_title, meta_key, meta_value from ' . $wpdb->prefix . 'posts, ' . $wpdb->prefix . 'postmeta where post_type = "linkedcanvasuser" and ID = post_id and meta_key = "CanvasCourse" and meta_value = ' . $course_id);
+				$admin_url = admin_url("edit.php?post_type=linkedcanvasuser&course=" . $course_id . "&canvas_linked=true");
 				
-				?><p><?PHP echo count($data) . " " . __("users linked"); ?> <a target="_blank" href="<?PHP echo admin_url("edit.php?post_type=linkedcanvasuser&course=" . $course_id . "&canvas_linked=true"); ?>"><?PHP echo __("See users in this course"); ?></a></p><?PHP
+				?><p><?PHP echo count($data) . " " . __("users linked"); ?> <a href="<?PHP echo $admin_url; ?>"><?PHP echo __("See users in this course"); ?></a></p><?PHP
 				
 				$data = $wpdb->get_results('select ' . $wpdb->prefix . 'posts.ID, post_title, meta_key, meta_value from ' . $wpdb->prefix . 'posts, ' . $wpdb->prefix . 'postmeta where post_type = "linkedcanvasquiz" and ID = post_id and meta_key = "CanvasCourse" and meta_value = ' . $course_id);
+				$admin_url = admin_url("edit.php?post_type=linkedcanvasquiz&course=" . $course_id . "&canvas_linked=true");
 				
-				?><p><?PHP echo count($data) . " " . __("quizzes linked"); ?> <a target="_blank" href="<?PHP echo admin_url("edit.php?post_type=linkedcanvasquiz&course=" . $course_id . "&canvas_linked=true"); ?>"><?PHP echo __("See quizzes in this course"); ?></a></p><?PHP
+				?><p><?PHP echo count($data) . " " . __("quizzes linked"); ?> <a href="<?PHP echo $admin_url; ?>"><?PHP echo __("See quizzes in this course"); ?></a></p><?PHP
 		
 				$data = $wpdb->get_results('select ' . $wpdb->prefix . 'posts.ID, post_title, meta_key, meta_value from ' . $wpdb->prefix . 'posts, ' . $wpdb->prefix . 'postmeta where post_type = "linkedcanvasamt" and ID = post_id and meta_key = "CanvasCourse" and meta_value = ' . $course_id);
+				$admin_url = admin_url("edit.php?post_type=linkedcanvasamt&course=" . $course_id . "&canvas_linked=true");
 				
-				?><p><?PHP echo count($data) . " " . __("assignments linked"); ?> <a target="_blank" href="<?PHP echo admin_url("edit.php?post_type=linkedcanvasamt&course=" . $course_id . "&canvas_linked=true"); ?>"><?PHP echo __("See assignments in this course"); ?></a></p><?PHP
+				?><p><?PHP echo count($data) . " " . __("assignments linked"); ?> <a href="<?PHP echo $admin_url; ?>"><?PHP echo __("See assignments in this course"); ?></a></p><?PHP
 		
 				$data = $wpdb->get_results('select ' . $wpdb->prefix . 'posts.ID, post_title, meta_key, meta_value from ' . $wpdb->prefix . 'posts, ' . $wpdb->prefix . 'postmeta where post_type = "linkedcanvasdis" and ID = post_id and meta_key = "CanvasCourse" and meta_value = ' . $course_id);
+				$admin_url = admin_url("edit.php?post_type=linkedcanvasdis&course=" . $course_id . "&canvas_linked=true");
 		
-				?><p><?PHP echo count($data) . " " . __("discussions linked"); ?> <a target="_blank" href="<?PHP echo admin_url("edit.php?post_type=linkedcanvasdis&course=" . $course_id . "&canvas_linked=true"); ?>"><?PHP echo __("See discussions in this course"); ?></a></p><?PHP
+				?><p><?PHP echo count($data) . " " . __("discussions linked"); ?> <a href="<?PHP echo $admin_url; ?>"><?PHP echo __("See discussions in this course"); ?></a></p><?PHP
 				
 			}else{
 				$args = array(
@@ -74,7 +82,10 @@
 				}
 				
 			}
-			?><p><a target="_blank" href="<?PHP echo admin_url("edit.php?post_type=linkedcanvascourse"); ?>"><?PHP echo __("Course Management Page in WordPress"); ?></a></p><?PHP
+
+			$admin_url = admin_url("wp-admin/edit.php?post_type=linkedcanvascourse");
+			
+			?><p><a target="_blank" href="<?PHP echo $admin_url; ?>"><?PHP echo __("Course Management Page in WordPress"); ?></a></p><?PHP
 		}
 	
 	}

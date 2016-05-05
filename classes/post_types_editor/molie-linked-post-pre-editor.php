@@ -43,8 +43,8 @@
 			$result = $xpath->query($query); 
 			foreach ($result as $node) {
 				$img_url = $node->getAttribute("src");
-				if(strpos($img_url,site_url())!==FALSE){
-					$stem = str_replace(site_url() . "/wp-content/uploads/","",$img_url);
+				if(strpos($img_url,network_site_url())!==FALSE){
+					$stem = str_replace(network_site_url() . "/wp-content/uploads/","",$img_url);
 					global $wpdb;
 					$image_post = $wpdb->get_results("select post_id from " . $wpdb->prefix . "postmeta where meta_value = '" . urldecode($stem) . "'");
 					$new_url = get_post_meta($image_post[0]->post_id,"CanvasFileURL",true);
@@ -85,7 +85,7 @@
 			$result = $xpath->query($query); 
 			foreach ($result as $node) {
 				$href = $node->getAttribute("href");
-				if(strpos($href,site_url())!==FALSE){
+				if(strpos($href,network_site_url())!==FALSE){
 					$linked_post_id = url_to_postid($href);
 					if($linked_post_id!=0){
 						if(get_post_meta($linked_post_id, "CanvasLinked", true)==1){

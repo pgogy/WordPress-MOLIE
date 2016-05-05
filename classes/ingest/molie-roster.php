@@ -15,7 +15,7 @@
 					wp_enqueue_script( 'molie-admin-roster', plugins_url() . '/molie/js/molie-admin-roster.js', array( 'jquery' ) );
 					wp_localize_script( 'molie-admin-roster', 'molie_admin_roster', 
 																					array( 
-																							'ajaxURL' => network_site_url() . "/wp-admin/admin-ajax.php",
+																							'ajaxURL' => admin_url("admin-ajax.php"),
 																							'nonce' => wp_create_nonce("molie_admin_roster")
 																						) 
 					);
@@ -24,7 +24,7 @@
 		}
 		
 		function menu_create(){
-			add_submenu_page( "molie_mgmt", __("Choose Course Roster"), __("Choose Course Roster"), 'manage_options', "molie_roster", array($this,"roster"));
+			add_submenu_page( "molie_mgmt", __("Choose Course Roster"), __("Choose Course Roster"), 'edit_linkedcanvascourse', "molie_roster", array($this,"roster"));
 		}
 		
 		private function create_categories($post){

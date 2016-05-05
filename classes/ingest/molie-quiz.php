@@ -15,7 +15,7 @@
 					wp_enqueue_script( 'molie-admin-quiz', plugins_url() . '/molie/js/molie-admin-quiz.js', array( 'jquery' ) );
 					wp_localize_script( 'molie-admin-quiz', 'molie_admin_quiz', 
 																					array( 
-																							'ajaxURL' => network_site_url() . "/wp-admin/admin-ajax.php",
+																							'ajaxURL' => admin_url("admin-ajax.php"),
 																							'nonce' => wp_create_nonce("molie_admin_quiz")
 																						) 
 					);
@@ -24,7 +24,7 @@
 		}
 		
 		function menu_create(){
-			add_submenu_page( "molie_mgmt", __("Choose Course quizzes"), __("Choose Course quizzes"), 'manage_options', "molie_quiz", array($this,"quiz"));
+			add_submenu_page( "molie_mgmt", __("Choose Course quizzes"), __("Choose Course quizzes"), 'edit_linkedcanvascourse', "molie_quiz", array($this,"quiz"));
 		}
 		
 		function quiz(){

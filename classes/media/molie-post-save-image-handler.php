@@ -129,7 +129,7 @@
 								$course_post = $wpdb->get_results("select post_id from " . $wpdb->prefix . "postmeta where meta_key='CourseID' and meta_value = '" . $course_id . "'");
 								$course_post = get_post($course_post[0]->post_id);
 								$canvas_url = get_post_meta($course_post->ID,"courseURL",true);
-								$site_url = site_url();
+								$site_url = network_site_url();
 								
 								if(strpos($img_url, $canvas_url . "/courses/" . $course_id . "/files")!==FALSE){
 									$this->canvasCheck($img_url);

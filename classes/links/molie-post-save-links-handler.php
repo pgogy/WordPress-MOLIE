@@ -20,7 +20,7 @@
 						$result = $xpath->query($query); 
 						foreach ($result as $node) {
 							$href = $node->getAttribute("href");
-							if(strpos($href,site_url())!==FALSE){
+							if(strpos($href,network_site_url())!==FALSE){
 								$linked_post_id = url_to_postid($href);
 								echo $linked_post_id . "<br />";
 								if($linked_post_id!=0){

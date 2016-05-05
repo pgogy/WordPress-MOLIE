@@ -36,6 +36,7 @@ jQuery(document).ready(
 						var data = {
 							'action': 'molie_course_list',
 							'url': jQuery("#canvas_url").val(),
+							'admin_url': jQuery("#admin_url").val(),
 							'token': jQuery("#canvas_token").val(),
 							'nonce': molie_admin_link.nonce
 						};

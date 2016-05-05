@@ -15,7 +15,7 @@
 					wp_enqueue_script( 'molie-admin-link', plugins_url() . '/molie/js/molie-admin-link.js', array( 'jquery' ) );
 					wp_localize_script( 'molie-admin-link', 'molie_admin_link', 
 																					array( 
-																							'ajaxURL' => network_site_url() . "/wp-admin/admin-ajax.php",
+																							'ajaxURL' => admin_url("admin-ajax.php"),
 																							'nonce' => wp_create_nonce("molie_admin_choose")
 																						) 
 					);
@@ -24,7 +24,7 @@
 		}
 		
 		function menu_create(){
-			add_submenu_page( "molie_mgmt", __("Link your course"), __("Link your course"), 'manage_options', "molie_link", array($this,"link"));
+			add_submenu_page( "molie_mgmt", __("Link your course"), __("Link your course"), 'edit_linkedcanvascourse', "molie_link", array($this,"link"));
 		}
 		
 		function link(){
@@ -67,6 +67,7 @@
 						<input id="canvas_url" type="text" />
 						<label><?PHP echo __("Enter the Canvas Token"); ?></label>
 						<input id="canvas_token" type="text" />
+						<input id="admin_url" type="hidden" value="<?PHP echo admin_url(); ?>" />
 						<input type="submit" id="molie_link_submit" value="<?PHP echo __("Connect"); ?>" />
 					</form>
 					<p id="molie_show_previous"><a><?PHP echo __("See previously used information"); ?></a></p>

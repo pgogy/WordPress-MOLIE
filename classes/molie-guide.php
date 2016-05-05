@@ -7,7 +7,7 @@
 		}
 	
 		function menu_create(){
-			add_submenu_page( "molie_mgmt", __("Guidance"), __("Guidance"), 'manage_options', "molie_guide", array($this,"guide"));
+			add_submenu_page( "molie_mgmt", __("Guidance"), __("Guidance"), 'edit_linkedcanvascourse', "molie_guide", array($this,"guide"));
 		}
 		
 		function guide(){

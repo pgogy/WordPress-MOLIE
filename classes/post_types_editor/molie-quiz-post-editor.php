@@ -31,7 +31,7 @@
 			$questions = $wpdb->get_results("select * from " . $wpdb->prefix . "postmeta where meta_key like '%canvasQuizQuestion_%' and post_id = " . $_GET['post']);
 			foreach($questions as $data){
 				$post = get_post($data->meta_value);
-				?><p><a href="<?PHP echo admin_url("post.php?post=" . $post->ID . "&action=edit"); ?>"><?PHP echo $post->post_title; ?></a></p><?PHP
+				?><p><a href="<?PHP echo network_admin_url("post.php?post=" . $post->ID . "&action=edit"); ?>"><?PHP echo $post->post_title; ?></a></p><?PHP
 			}
 		}
 		

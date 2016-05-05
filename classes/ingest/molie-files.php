@@ -15,7 +15,7 @@
 					wp_enqueue_script( 'molie-admin-file', plugins_url() . '/molie/js/molie-admin-file.js', array( 'jquery' ) );
 					wp_localize_script( 'molie-admin-file', 'molie_admin_file', 
 																					array( 
-																							'ajaxURL' => network_site_url() . "/wp-admin/admin-ajax.php",
+																							'ajaxURL' => admin_url("admin-ajax.php"),
 																							'nonce' => wp_create_nonce("molie_admin_file")
 																						) 
 					);
@@ -24,7 +24,7 @@
 		}
 		
 		function menu_create(){
-			add_submenu_page( "molie_mgmt", __("Choose Course Files"), __("Choose Course Files"), 'manage_options', "molie_files", array($this,"files"));
+			add_submenu_page( "molie_mgmt", __("Choose Course Files"), __("Choose Course Files"), 'edit_linkedcanvascourse', "molie_files", array($this,"files"));
 		}
 		
 		function files(){
@@ -44,7 +44,7 @@
 					$nonce = wp_create_nonce("molie-files");
 					foreach($courses as $course){
 					?>
-						<form method="post" action='<?PHP echo admin_url("admin.php?page=molie_files"); ?>'>
+						<form method="post" action="<?PHP echo admin_url("admin.php?page=molie_files"); ?>">
 							<p><?PHP echo $course->post_title; ?></p>
 							<input type="hidden" name="molie-files-nonce" value="<?PHP echo $nonce; ?>"/>
 							<input type="hidden" name="url" value="<?PHP echo get_post_meta($course->ID, "courseURL", true); ?>" />

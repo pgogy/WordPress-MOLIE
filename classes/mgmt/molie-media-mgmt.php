@@ -17,7 +17,7 @@
 		}
 		
 		function menu_create(){
-			add_submenu_page( "molie_mgmt", __("Course Media"), __("Course Media"), 'manage_options', "molie_mediamgmt", array($this,"media"));
+			add_submenu_page( "molie_mgmt", __("Course Media"), __("Course Media"), 'edit_linkedcanvascourse', "molie_mediamgmt", array($this,"media"));
 		}
 		
 		function media(){
@@ -43,7 +43,10 @@
 			
 			while($query->have_posts()){
 				$query->the_post();
-				?><div class="media"><a href="<?PHP echo admin_url("upload.php?item=" . get_the_id()); ?>"><p><img src="<?PHP echo wp_get_attachment_thumb_url(get_the_ID()); ?>"/></p><p><?PHP echo the_title(); ?></p></a></div><?PHP
+				
+				$upload_url = admin_url("upload.php?item=" . get_the_id());
+			
+				?><div class="media"><a href="<?PHP echo $upload_url; ?>"><p><img src="<?PHP echo wp_get_attachment_thumb_url(get_the_ID()); ?>"/></p><p><?PHP echo the_title(); ?></p></a></div><?PHP
 			}
 		}
 	

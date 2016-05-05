@@ -7,7 +7,7 @@
 		}
 		
 		function menu_create(){
-			add_submenu_page( "molie_mgmt", __("Using the tool"), __("Using the tool"), 'manage_options', "molie_help", array($this,"help"));
+			add_submenu_page( "molie_mgmt", __("Using the tool"), __("Using the tool"), 'edit_linkedcanvascourse', "molie_help", array($this,"help"));
 		}
 		
 		function help(){

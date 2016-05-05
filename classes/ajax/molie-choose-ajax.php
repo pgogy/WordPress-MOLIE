@@ -129,7 +129,7 @@
 			
 				$course = $_POST['course'];
 				$post = get_post($course);
-				
+
 				if($post){
 				
 					$categories = $this->create_categories($post);
@@ -172,7 +172,7 @@
 						if($post_content->content->body==""){
 							$post_content->content->body = " ";
 						}
-						
+				
 						$page = wp_insert_post(
 													array(
 														"post_type" => 'post',

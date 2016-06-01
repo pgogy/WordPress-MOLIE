@@ -49,3 +49,11 @@ p#molie_show_previous{
 	cursor: pointer;
 	cursor: hand;
 }
+
+p.token{
+	clear: both;
+}
+
+p.token a{
+	text-decoration: none;
+}

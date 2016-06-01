@@ -11,6 +11,7 @@
 			if(isset($_GET['page'])){
 				if($_GET['page']=="molie_roster"){
 					wp_register_style( 'molie_admin_calendar_css', plugins_url() . '/molie/css/molie-admin-roster.css', false, '1.0.0' );
+					wp_enqueue_script( 'molie-admin-select', plugins_url() . '/molie/js/molie-admin-select.js', array( 'jquery' ) );
 					wp_enqueue_style( 'molie_admin_calendar_css' );
 				}
 			}

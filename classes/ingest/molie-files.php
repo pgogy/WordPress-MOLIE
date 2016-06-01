@@ -12,6 +12,7 @@
 				if($_GET['page']=="molie_files"){
 					wp_register_style( 'molie_admin_file_css', plugins_url() . '/molie/css/molie-admin-file.css', false, '1.0.0' );
 					wp_enqueue_style( 'molie_admin_file_css' );
+					wp_enqueue_script( 'molie-admin-select', plugins_url() . '/molie/js/molie-admin-select.js', array( 'jquery' ) );
 					wp_enqueue_script( 'molie-admin-file', plugins_url() . '/molie/js/molie-admin-file.js', array( 'jquery' ) );
 					wp_localize_script( 'molie-admin-file', 'molie_admin_file', 
 																					array( 
@@ -143,6 +144,7 @@
 							echo '<form id="molie_choose_form" action="javascript:function connect(){return false;};">';
 							echo "<input type='submit' id='molie_file_submit' value='" . __("Import files") . "' />";	
 							echo "<input type='submit' id='molie_choose_skip' value='" . __("Skip step") . "' />";	
+							echo "<p><span><a href='javascript:molie_select_all()'>" . __("Select All") . "</a></span> <span><a href='javascript:molie_unselect_all()'>" . __("Unselect All") . "</a></span></p>"; 
 							echo "<ul>";
 							foreach($data->content as $file){
 								echo "<li>";

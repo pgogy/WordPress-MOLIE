@@ -12,6 +12,7 @@
 				if($_GET['page']=="molie_choose"){
 					wp_register_style( 'molie_admin_choose_css', plugins_url() . '/molie/css/molie-admin-choose.css', false, '1.0.0' );
 					wp_enqueue_style( 'molie_admin_choose_css' );
+					wp_enqueue_script( 'molie-admin-select', plugins_url() . '/molie/js/molie-admin-select.js', array( 'jquery' ) );
 					wp_enqueue_script( 'molie-admin-choose', plugins_url() . '/molie/js/molie-admin-choose.js', array( 'jquery' ) );
 					wp_localize_script( 'molie-admin-choose', 'molie_admin_choose', 
 																					array( 
@@ -108,6 +109,7 @@
 							echo '<form id="molie_choose_form" action="javascript:function connect(){return false;};">';
 							echo "<input type='submit' id='molie_choose_submit' value='" . __("Import pages") . "' />";	
 							echo "<input type='submit' id='molie_choose_skip' value='" . __("Skip step") . "' />";	
+							echo "<p><span><a href='javascript:molie_select_all()'>" . __("Select All") . "</a></span> <span><a href='javascript:molie_unselect_all()'>" . __("Unselect All") . "</a></span></p>"; 
 							echo "<p>" . __("Course syllabus") . "</p>";
 							echo "<ul>";
 							$link_info = "";

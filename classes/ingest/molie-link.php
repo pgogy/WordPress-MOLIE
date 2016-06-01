@@ -70,27 +70,33 @@
 						<input id="admin_url" type="hidden" value="<?PHP echo admin_url(); ?>" />
 						<input type="submit" id="molie_link_submit" value="<?PHP echo __("Connect"); ?>" />
 					</form>
-					<p id="molie_show_previous"><a><?PHP echo __("See previously used information"); ?></a></p>
+					<p class="token"><a target="_blank" href="<?PHP echo admin_url("admin.php?page=molie_token"); ?>"><?PHP echo __("How to get your token"); ?></a></p>
+					<?PHP
+					
+						$urls = get_user_meta(get_current_user_id(), "courseLinkURLsTokens", true);
+						if(is_array($urls)){
+					
+					?><p id="molie_show_previous"><a><?PHP echo __("See previously used information"); ?></a></p>
 					<div id="molie_previous">
 						<h3><?PHP echo __("Previously used information"); ?></h3>
 						<?PHP
-							$urls = get_user_meta(get_current_user_id(), "courseLinkURLsTokens", true);
-							if(is_array($urls)){
-								foreach($urls as $url => $tokens){
-									?><div class="canvasData">
-										<div class="canvasURL"><?PHP echo $url; ?></div>
-										<div class="canvasTokens"><?PHP 
+
+							foreach($urls as $url => $tokens){
+								?><div class="canvasData">
+									<div class="canvasURL"><?PHP echo $url; ?></div>
+									<div class="canvasTokens"><?PHP 
 											
-											foreach($tokens as $token){
-												?><div><span><?PHP echo $token; ?></span> - <a class="canvasUse"><?PHP echo __("Use this data"); ?></a></div><?PHP
-											}
-											
-											?></div>
-										</div><?PHP
-								}
+										foreach($tokens as $token){
+											?><div><span><?PHP echo $token; ?></span> - <a class="canvasUse"><?PHP echo __("Use this data"); ?></a></div><?PHP
+										}
+										
+										?></div>
+									</div><?PHP
 							}
 						?>
-					</div>
+					</div><?PHP
+						}
+					?>
 					<div id="molie_response">
 					</div>
 				</div>

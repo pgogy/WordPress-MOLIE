@@ -12,6 +12,7 @@
 				if($_GET['page']=="molie_assignments"){
 					wp_register_style( 'molie_admin_assignment_css', plugins_url() . '/molie/css/molie-admin-assignment.css', false, '1.0.0' );
 					wp_enqueue_style( 'molie_admin_assignment_css' );
+					wp_enqueue_script( 'molie-admin-select', plugins_url() . '/molie/js/molie-admin-select.js', array( 'jquery' ) );
 					wp_enqueue_script( 'molie-admin-assignment', plugins_url() . '/molie/js/molie-admin-assignment.js', array( 'jquery' ) );
 					wp_localize_script( 'molie-admin-assignment', 'molie_admin_assignment', 
 																					array( 
@@ -61,7 +62,8 @@
 							echo "<div id='importProgress'><p><strong>" . __("Import Progress") . " <span id='importTotal'></span></strong></p><div id='importProgressBar'></div></div>";
 							echo '<form id="molie_choose_form" action="javascript:function connect(){return false;};">';
 							echo "<input type='submit' id='molie_assignment_submit' value='" . __("Link Assignments") . "' />";	
-							echo "<input type='submit' id='molie_assignment_skip' value='" . __("Skip step") . "' />";	
+							echo "<input type='submit' id='molie_assignment_skip' value='" . __("Skip step") . "' />";
+							echo "<p><span><a href='javascript:molie_select_all()'>" . __("Select All") . "</a></span> <span><a href='javascript:molie_unselect_all()'>" . __("Unselect All") . "</a></span></p>"; 
 							echo "<ul>";
 							foreach($data->content as $quiz){
 								echo "<li>";

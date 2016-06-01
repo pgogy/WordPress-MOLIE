@@ -15,7 +15,7 @@
 	
 		
 		function menu_create(){
-			add_menu_page( __("M.O.L.I.E"), __("M.O.L.I.E"), "manage_options", "molie_mgmt", array($this,"mgmt"));
+			add_menu_page( __("M.O.L.I.E"), __("M.O.L.I.E"), "edit_linkedcanvascourse", "molie_mgmt", array($this,"mgmt"));
 		}
 		
 		function mgmt(){
@@ -75,6 +75,7 @@
 	require_once("classes/display/molie-post-link-display-add-css.php");
 	require_once("classes/display/molie-roster-display.php");
 	require_once("classes/roles/molie-admin-roles.php");
+	require_once("classes/mgmt/molie-course-poll.php");
 	require_once("classes/mgmt/molie-post-filter.php");
 	require_once("classes/mgmt/molie-quiz-filter.php");
 	require_once("classes/mgmt/molie-HTML-filter.php");

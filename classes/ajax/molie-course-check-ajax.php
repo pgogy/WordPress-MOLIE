@@ -124,7 +124,7 @@
 																);
 	
 				$course_id = get_post_meta($_POST['course'],"courseID",true);
-				$quizzes = new InstructureCanvasAPI\Courses\quizzes\quizzes();
+				$quizzes = new InstructureCanvasAPI\Courses\Quizzes\Quizzes();
 				$quizzes->setAPI($API);
 				$quizzes->setCourseID($course_id);
 				$data = $quizzes->getquizzes();

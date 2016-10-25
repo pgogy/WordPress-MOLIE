@@ -9,6 +9,7 @@
 		function course_list(){
 			if(wp_verify_nonce($_POST['nonce'], "molie_admin_choose"))
 			{
+
 				require_once(__DIR__ . "/../../API/Psr4AutoloaderClass.php");
 				$loader = new Psr4AutoloaderClass;
 				$loader->register();
@@ -27,10 +28,13 @@
 																		"webService" => "CURL"
 																	)
 																);
-				
+
 				$courses = new InstructureCanvasAPI\Courses\Courses();
+
 				$courses->setAPI($API);
+
 				$data = $courses->getCoursesForThisUser();
+
 				if($data){
 					if(count($data->content)!=0){
 						echo "<form method='post' action='" . $_POST['admin_url'] . "admin.php?page=molie_choose'>";
@@ -49,9 +53,7 @@
 					else
 					{
 						echo "<p>" . __("There was an error connecting") . "</p>";
-						echo "<pre>";
-						print_r($data);
-						echo "</pre>";
+						echo "<p>" . $data[1] . "</p>";
 					}
 				}
 				$loader->unregister();

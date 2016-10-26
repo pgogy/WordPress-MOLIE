@@ -1,10 +1,10 @@
 <?PHP
 
 	/*
-		Plugin Name: M.O.L.I.E
-		Description: Linking a course between Instructure Canvas and WordPress
+		Plugin Name: M.O.L.I.E - Canvas to WordPress Open Course Tool
+		Description: Linking a course between Instructure Canvas and WordPress to help create open courses
 		Author: pgogy
-		Version: 0.1
+		Version: 0.2
 	*/
 	
 	class MOLIE{
@@ -22,7 +22,7 @@
 			?>
 				<h1>M.O.L.I.E</h1>
 				<p>
-					Start by click on getting your token in the menu
+					<?PHP echo __("Start by click on getting your token in the menu"); ?>
 				</p>
 			<?PHP
 		}	

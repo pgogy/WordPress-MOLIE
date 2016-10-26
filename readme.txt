@@ -1,4 +1,4 @@
-=== Plugin Name ===
+=== MOLIE - Instructure Canvas Linking tool ===
 Contributors: pgogy
 Tags: Instructure Canvas, Canvas, LMS, Open Courses, Connected courses
 Requires at least: 3.0.1
